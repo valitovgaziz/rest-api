@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/valitovgaziz/rest-api/initializers"
+	"github.com/valitovgaziz/rest-api/migrate"
 )
 
 var (
@@ -28,6 +29,10 @@ func main() {
 	if err != nil {
 		log.Fatal("Can't load environment variables", err)
 	}
+	sqlDB, err := initializers.DB.DB()
+	defer sqlDB.Close()
+
+	migrate.Migrate()
 
 	router := server.Group("/api")
 	router.GET("/hello", func(c *gin.Context) {
