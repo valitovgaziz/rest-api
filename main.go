@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -14,7 +13,8 @@ var (
 )
 
 func init() {
-	if config, err := initializers.LoadConfig("."); err!= nil {
+	config, err := initializers.LoadConfig(".")
+	if err != nil {
 		log.Fatal("Can't load environment variables", err)
 	}
 
@@ -24,11 +24,16 @@ func init() {
 }
 
 func main() {
+	config, err := initializers.LoadConfig(".")
+	if err != nil {
+		log.Fatal("Can't load environment variables", err)
+	}
+
 	router := server.Group("/api")
 	router.GET("/hello", func(c *gin.Context) {
 		message := "from gin"
 		c.JSON(http.StatusOK, gin.H{"status": "succes", "message": message})
 	})
 
-	log.Fatal(server.)
+	log.Fatal(server.Run(":" + config.ServerPort))
 }
