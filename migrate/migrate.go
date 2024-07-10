@@ -12,6 +12,7 @@ func Migrate() {
 		&models.DepthOrder{},
 		&models.HistoryOrder{},
 		&models.OrderBook{},
+		&models.Client{},
 	)
 
 	slog.Info("Migration complited")
