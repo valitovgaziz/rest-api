@@ -9,11 +9,12 @@ import (
 
 func Migrate() {
 	initializers.DB.AutoMigrate(
+		&models.HistoryOrder{},
 		&models.OrderBook{},
 		&models.DepthOrderAsks{},
 		&models.DepthOrderBids{},
+		&models.Client{},
 	)
 
 	slog.Info("Migration complited")
-
 }

@@ -30,7 +30,7 @@ func main() {
 		log.Fatal("Can't load environment variables", err)
 	}
 	sqlDB, err := initializers.DB.DB()
-	if err!= nil {
+	if err != nil {
 		log.Fatal("Can't connect to database", err)
 	}
 	defer sqlDB.Close()
