@@ -22,6 +22,7 @@ func GetOrderBook(exchange_name string, pair string) ([]*models.OrderBook, error
 	return orderBooks, nil
 }
 
+<<<<<<< HEAD
 func SaveOrderBook(exchage_name string, pair string, bids []models.DepthOrderBids, asks []models.DepthOrderAsks) error {
 	OB := new(models.OrderBook)
 	OB.ExchangeName = exchage_name
