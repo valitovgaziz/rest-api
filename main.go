@@ -5,8 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/valitovgaziz/rest-api/initializers"
-	"github.com/valitovgaziz/rest-api/migrate"
+	"github.com/valitovgaziz/rest-api/storage"
 )
 
 var (
@@ -14,28 +13,26 @@ var (
 )
 
 func init() {
-	config, err := initializers.LoadConfig(".")
+	config, err := storage.LoadConfig(".")
 	if err != nil {
 		log.Fatal("Can't load environment variables", err)
 	}
 
-	initializers.ConnectDB(&config)
+	storage.ConnectDB(&config)
 
 	server = gin.Default()
 }
 
 func main() {
-	config, err := initializers.LoadConfig(".")
+	config, err := storage.LoadConfig(".")
 	if err != nil {
 		log.Fatal("Can't load environment variables", err)
 	}
-	sqlDB, err := initializers.DB.DB()
 	if err != nil {
 		log.Fatal("Can't connect to database", err)
 	}
-	defer sqlDB.Close()
-
-	migrate.Migrate()
+	defer storage.DropTables()
+	defer storage.Close()
 
 	router := server.Group("/api")
 	router.GET("/hello", func(c *gin.Context) {

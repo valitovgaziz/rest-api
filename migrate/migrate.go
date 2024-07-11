@@ -3,12 +3,12 @@ package migrate
 import (
 	"log/slog"
 
-	"github.com/valitovgaziz/rest-api/initializers"
 	"github.com/valitovgaziz/rest-api/models"
+	"github.com/valitovgaziz/rest-api/storage"
 )
 
 func Migrate() {
-	initializers.DB.AutoMigrate(
+	storage.DB.AutoMigrate(
 		&models.HistoryOrder{},
 		&models.OrderBook{},
 		&models.DepthOrderAsks{},

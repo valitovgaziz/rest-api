@@ -1,9 +1,10 @@
-package initializers
+package storage
 
 import (
 	"fmt"
 	"log"
 
+	"github.com/valitovgaziz/rest-api/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -19,4 +20,22 @@ func ConnectDB(config *Config) {
 		log.Fatal("Failed to connect to the Database")
 	}
 	fmt.Println("🚀 Connected Successfully to the Database")
+}
+
+func DropTables() {
+	DB.Migrator().DropTable(
+		&models.Client{},
+		&models.DepthOrderAsks{},
+		&models.DepthOrderBids{},
+		&models.OrderBook{},
+		&models.HistoryOrder{},
+	)
+}
+
+func Close() {
+	conn, err := DB.DB()
+	if err != nil {
+		log.Fatal("Failed to close the Database")
+	}
+	defer conn.Close()
 }
