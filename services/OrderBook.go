@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/valitovgaziz/rest-api/storage"
 	"github.com/valitovgaziz/rest-api/models"
+	"github.com/valitovgaziz/rest-api/storage"
 )
 
 func GetOrderBook(exchange_name string, pair string) ([]*models.OrderBook, error) {
@@ -20,6 +20,19 @@ func GetOrderBook(exchange_name string, pair string) ([]*models.OrderBook, error
 	}
 
 	return orderBooks, nil
+}
+
+func SaveOrderBook(exchage_name string, pair string, bids []models.DepthOrderBids, asks []models.DepthOrderAsks) err {
+	OB := new(models.OrderBook)
+	OB.ExchangeName = exchage_name
+	OB.Pair = pair
+	OB.Asks = asks
+	OB.Bids = bids
+
+	if err := storage.DB.Save(OB).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
 func GetOrder(client *models.Client) ([]*models.HistoryOrder, error) {
