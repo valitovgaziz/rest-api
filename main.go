@@ -42,13 +42,13 @@ func main() {
 	// Маршрутизация
 	OrderBookRouter := server.Group("/OrderBook")
 	{
-		OrderBookRouter.GET("/GetOrderBook", controllers.GetOrderBook)
-		OrderBookRouter.POST("/SaveOrderBook", controllers.SaveOrderBook)
+		go OrderBookRouter.GET("/GetOrderBook", controllers.GetOrderBook)
+		go OrderBookRouter.POST("/SaveOrderBook", controllers.SaveOrderBook)
 	}
 	OrderHistoryRouter := server.Group("/OrderHistory")
 	{
-		OrderHistoryRouter.GET("/GetOrderHistory", controllers.GetOrderHistory)
-		OrderHistoryRouter.POST("/SaveOrderHistory", controllers.SaveOrderHistory)
+		go OrderHistoryRouter.GET("/GetOrderHistory", controllers.GetOrderHistory)
+		go OrderHistoryRouter.POST("/SaveOrderHistory", controllers.SaveOrderHistory)
 	}
 
 	log.Fatal(server.Run(":" + config.ServerPort))
