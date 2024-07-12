@@ -19,6 +19,9 @@ func ConnectDB(config *Config) {
 	if err != nil {
 		log.Fatal("Failed to connect to the Database")
 	}
+	
+	log.Logger
+
 	fmt.Println("🚀 Connected Successfully to the Database")
 }
 

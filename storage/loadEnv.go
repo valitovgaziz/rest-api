@@ -13,6 +13,7 @@ type Config struct {
 	ServerPort     string `mapstructure:"PORT"`
 
 	ClientOrigin string `mapstructure:"CLIENT_ORIGIN"`
+	LogLevel     string `mapstructure:"LOG_LEVEL"`
 }
 
 func LoadConfig(path string) (config Config, err error) {

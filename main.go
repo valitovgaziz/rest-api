@@ -8,18 +8,21 @@ import (
 	"github.com/valitovgaziz/rest-api/storage"
 )
 
-var (
-	server *gin.Engine
-)
+var server *gin.Engine
 
 func init() {
+	// set default logger
+
+	// load config from environment variables
 	config, err := storage.LoadConfig(".")
 	if err != nil {
 		log.Fatal("Can't load environment variables", err)
-	}
+	} // if error message
 
+	// connect to PostgreSQL
 	storage.ConnectDB(&config)
 
+	// set server instance
 	server = gin.Default()
 }
 
