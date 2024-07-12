@@ -2,10 +2,11 @@ package main
 
 import (
 	"log"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/valitovgaziz/rest-api/controllers"
 	"github.com/valitovgaziz/rest-api/storage"
+	"github.com/valitovgaziz/rest-api/configs"
 )
 
 var server *gin.Engine
@@ -14,7 +15,7 @@ func init() {
 	// set default logger
 
 	// load config from environment variables
-	config, err := storage.LoadConfig(".")
+	config, err := configs.LoadConfig(".")
 	if err != nil {
 		log.Fatal("Can't load environment variables", err)
 	} // if error message
@@ -27,7 +28,8 @@ func init() {
 }
 
 func main() {
-	config, err := storage.LoadConfig(".")
+	// Загрузка переменных окружения
+	config, err := configs.LoadConfig(".")
 	if err != nil {
 		log.Fatal("Can't load environment variables", err)
 	}
@@ -37,11 +39,17 @@ func main() {
 	defer storage.DropTables()
 	defer storage.Close()
 
-	router := server.Group("/api")
-	router.GET("/hello", func(c *gin.Context) {
-		message := "from gin"
-		c.JSON(http.StatusOK, gin.H{"status": "succes", "message": message})
-	})
+	// Маршрутизация
+	OrderBookRouter := server.Group("/OrderBook")
+	{
+		OrderBookRouter.GET("/GetOrderBook", controllers.GetOrderBook)
+		OrderBookRouter.POST("/SaveOrderBook", controllers.SaveOrderBook)
+	}
+	OrderHistoryRouter := server.Group("/OrderHistory")
+	{
+		OrderHistoryRouter.GET("/GetOrderHistory", controllers.GetOrderHistory)
+		OrderHistoryRouter.POST("/SaveOrderHistory", controllers.SaveOrderHistory)
+	}
 
 	log.Fatal(server.Run(":" + config.ServerPort))
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/valitovgaziz/rest-api/configs"
 	"github.com/valitovgaziz/rest-api/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -11,16 +12,15 @@ import (
 
 var DB *gorm.DB
 
-func ConnectDB(config *Config) {
+// Connect to the Database
+func ConnectDB(configs *configs.Config) {
 	var err error
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai", config.DBHost, config.DBUserName, config.DBUserPassword, config.DBName, config.DBPort)
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai", configs.DBHost, configs.DBUserName, configs.DBUserPassword, configs.DBName, configs.DBPort)
 
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to connect to the Database")
 	}
-	
-	log.Logger
 
 	fmt.Println("🚀 Connected Successfully to the Database")
 }
