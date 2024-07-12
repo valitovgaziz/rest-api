@@ -36,6 +36,8 @@ func main() {
 	if err != nil {
 		log.Fatal("Can't connect to database", err)
 	}
+
+	// Отключение БД
 	defer storage.DropTables()
 	defer storage.Close()
 
