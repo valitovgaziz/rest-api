@@ -12,7 +12,7 @@ func GetOrderBook(exchange_name string, pair string) ([]*models.OrderBook, error
 	var orderBooks []*models.OrderBook
 
 	// Используем метод Find для поиска записей в базе данных
-	if err := storage.DB.Where("exchange = ? AND pair = ?", exchange_name, pair).Find(&orderBooks).Error; err != nil {
+	if orderBooks, err := storage.DB.Where("exchange = ? AND pair = ?", exchange_name, pair).Find(&orderBooks).Error; err != nil {
 		if err == sql.ErrNoRows {
 			return nil, fmt.Errorf("no order book found for %s/%s", exchange_name, pair)
 		}
@@ -22,7 +22,12 @@ func GetOrderBook(exchange_name string, pair string) ([]*models.OrderBook, error
 	return orderBooks, nil
 }
 
-func SaveOrderBook(exchage_name string, pair string, bids []models.DepthOrderBids, asks []models.DepthOrderAsks) error {
+func SaveOrderBook(
+	exchage_name string,
+	pair string,
+	bids []models.DepthOrderBids,
+	asks []models.DepthOrderAsks,
+) error {
 	OB := new(models.OrderBook)
 	OB.ExchangeName = exchage_name
 	OB.Pair = pair
@@ -34,4 +39,3 @@ func SaveOrderBook(exchage_name string, pair string, bids []models.DepthOrderBid
 	}
 	return nil
 }
-

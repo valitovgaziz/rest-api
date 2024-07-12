@@ -30,6 +30,6 @@ func SaveOrderHistory(ctx *gin.Context) {
 	}
 	ctx.JSON(200, gin.H{
 		"msg": "saved",
-		"id":  string(OH.ID),
+		"id":  OH.ID,
 	})
 }

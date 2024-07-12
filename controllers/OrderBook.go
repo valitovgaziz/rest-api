@@ -2,16 +2,30 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/valitovgaziz/rest-api/models"
+	"github.com/valitovgaziz/rest-api/services"
+	"github.com/valyala/fastjson"
 )
 
-func GetOrderBook(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "GetOrderBook",
-	})
+func GetOrderBook(ctx *gin.Context) {
+	OB, err := services.GetOrderBook(ctx.Param("exchange_name"), ctx.Param("pair"))
+	if err != nil {
+		ctx.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(200, OB)
 }
 
-func SaveOrderBook(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "SaveOrderBook",
+func SaveOrderBook(ctx *gin.Context) {
+	var p fastjson.Parser
+	Bids = p.Parse(ctx.Param("bids"))
+	Asks = p.Parse(ctx.Param("asks"))
+	err := services.SaveOrderBook(ctx.Param("exchange_name"), ctx.Param("pair"), Bids, Asks)
+	if err != nil {
+		ctx.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(200, gin.H{
+		"message": "OrderBook saved",
 	})
 }
