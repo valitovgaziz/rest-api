@@ -20,7 +20,9 @@ func SaveOrderBook(ctx *gin.Context) {
 	var p fastjson.Parser
 	Bids = p.Parse(ctx.Param("bids"))
 	Asks = p.Parse(ctx.Param("asks"))
-	err := services.SaveOrderBook(ctx.Param("exchange_name"), ctx.Param("pair"), Bids, Asks)
+	bidss := []models.DepthOrderBids{}
+	asdss := []models.DepthOrderAsks{}
+	err := services.SaveOrderBook(ctx.Param("exchange_name"), ctx.Param("pair"), bidss, asdss)
 	if err != nil {
 		ctx.JSON(400, gin.H{"error": err.Error()})
 		return
