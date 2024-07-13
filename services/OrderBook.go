@@ -2,7 +2,6 @@ package services
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/valitovgaziz/rest-api/models"
 	"github.com/valitovgaziz/rest-api/storage"
@@ -12,28 +11,17 @@ func GetOrderBook(exchange_name string, pair string) ([]*models.OrderBook, error
 	var orderBooks []*models.OrderBook
 
 	// Используем метод Find для поиска записей в базе данных
-	if orderBooks, err := storage.DB.Where("exchange = ? AND pair = ?", exchange_name, pair).Find(&orderBooks).Error; err != nil {
+	if err := storage.DB.Where("exchange = ? AND pair = ?", exchange_name, pair).Find(&orderBooks).Error; err != nil {
 		if err == sql.ErrNoRows {
-			return nil, fmt.Errorf("no order book found for %s/%s", exchange_name, pair)
+			return []*models.OrderBook{}, nil // Возвращаем пустой массив и nil, чтобы указать на отсутствие записей
 		}
-		return nil, err
+		return nil, err // Возвращаем ошибку, если произошла другая ошибка
 	}
 
 	return orderBooks, nil
 }
 
-func SaveOrderBook(
-	exchage_name string,
-	pair string,
-	bids []models.DepthOrderBids,
-	asks []models.DepthOrderAsks,
-) error {
-	OB := new(models.OrderBook)
-	OB.ExchangeName = exchage_name
-	OB.Pair = pair
-	OB.Asks = asks
-	OB.Bids = bids
-
+func SaveOrderBook(OB models.OrderBook) error {
 	if err := storage.DB.Save(OB).Error; err != nil {
 		return err
 	}

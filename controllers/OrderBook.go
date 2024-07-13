@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/valitovgaziz/rest-api/models"
 	"github.com/valitovgaziz/rest-api/services"
-	"github.com/valyala/fastjson"
 )
 
 func GetOrderBook(ctx *gin.Context) {
@@ -17,12 +16,8 @@ func GetOrderBook(ctx *gin.Context) {
 }
 
 func SaveOrderBook(ctx *gin.Context) {
-	var p fastjson.Parser
-	Bids = p.Parse(ctx.Param("bids"))
-	Asks = p.Parse(ctx.Param("asks"))
-	bidss := []models.DepthOrderBids{}
-	asdss := []models.DepthOrderAsks{}
-	err := services.SaveOrderBook(ctx.Param("exchange_name"), ctx.Param("pair"), bidss, asdss)
+	orderBook := ctx.Value("order_book").(models.OrderBook)
+	err := services.SaveOrderBook(orderBook)
 	if err != nil {
 		ctx.JSON(400, gin.H{"error": err.Error()})
 		return
