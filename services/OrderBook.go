@@ -11,7 +11,7 @@ func GetOrderBook(exchange_name string, pair string) ([]*models.OrderBook, error
 	var orderBooks []*models.OrderBook
 
 	// Используем метод Find для поиска записей в базе данных
-	if err := storage.DB.Where("exchange = ? AND pair = ?", exchange_name, pair).Find(&orderBooks).Error; err != nil {
+	if err := storage.DB.Where("exchange_name = ? AND pair = ?", exchange_name, pair).Find(&orderBooks).Error; err != nil {
 		if err == sql.ErrNoRows {
 			return []*models.OrderBook{}, nil // Возвращаем пустой массив и nil, чтобы указать на отсутствие записей
 		}
