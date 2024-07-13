@@ -4,9 +4,10 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/valitovgaziz/rest-api/controllers"
-	"github.com/valitovgaziz/rest-api/storage"
 	"github.com/valitovgaziz/rest-api/configs"
+	"github.com/valitovgaziz/rest-api/controllers"
+	"github.com/valitovgaziz/rest-api/migrate"
+	"github.com/valitovgaziz/rest-api/storage"
 )
 
 var server *gin.Engine
@@ -36,6 +37,9 @@ func main() {
 	if err != nil {
 		log.Fatal("Can't connect to database", err)
 	}
+
+	// Автоматическая миграция  моделей
+	migrate.Migrate()
 
 	// Отключение БД
 	defer storage.DropTables()
