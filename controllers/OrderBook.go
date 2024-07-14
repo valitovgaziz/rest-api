@@ -16,10 +16,15 @@ func GetOrderBook(ctx *gin.Context) {
 }
 
 func SaveOrderBook(ctx *gin.Context) {
-	orderBook := ctx.Value("order_book").(models.OrderBook)
-	err := services.SaveOrderBook(orderBook)
+	var OB models.OrderBook
+	err := ctx.ShouldBindJSON(&OB)
 	if err != nil {
 		ctx.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+	err1 := services.SaveOrderBook(OB)
+	if err1 != nil {
+		ctx.JSON(400, gin.H{"error": err1.Error()})
 		return
 	}
 	ctx.JSON(200, gin.H{
