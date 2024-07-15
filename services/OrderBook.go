@@ -22,7 +22,21 @@ func GetOrderBook(exchange_name string, pair string) ([]*models.OrderBook, error
 }
 
 func SaveOrderBook(OB models.OrderBook) error {
-	if err := storage.DB.Save(OB).Error; err != nil {
+	/*
+	for _, bid := range OB.Bids {
+		if err := storage.DB.Create(bid).Error; err != nil {
+			return err
+		}
+	}
+	for _, ask := range OB.Asks {
+		if err := storage.DB.Create(ask).Error; err != nil {
+			return err
+		}
+	}
+		*/
+	
+
+	if err := storage.DB.Create(&OB).Error; err != nil {
 		return err
 	}
 	return nil
