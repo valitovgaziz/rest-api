@@ -7,7 +7,11 @@ import (
 // HistoryOrder represents a single trade history record
 type HistoryOrder struct {
 	ID                    uint      `gorm:"columnt:id;primary_key;autoincrement;not null;"`
-	ClientID              uint      `gorm:"column:client_id;not null;" json:"ClientID"`
+	ClientID              uint      `gorm:"column:client_id;foreignKey;not null;"`
+	Client_name           string    `gorm:"column:client_name;not null;type:varchar(255);uniqueIndex"`
+	Exchange_name         string    `gorm:"column:exchange_nam;not nulltype:varchar(255)"`
+	Label                 string    `gorm:"type:varchar(255)"`
+	Pair                  string    `gorm:"type:varchar(255)"`
 	Side                  string    `gorm:"column:side;type:varchar(255);default:0" json:"Side"`
 	Type                  string    `gorm:"column:type;type:varchar(255);default:0" json:"Type"`
 	Base_qty              float64   `gorm:"column:base_qty;type:integer;default:0" json:"BaseQty"`

@@ -13,9 +13,9 @@ func GetOrderHistory(client *models.Client) ([]*models.HistoryOrder, error) {
 	var historyOrders []*models.HistoryOrder
 
 	// Используем метод Find для поиска записей в базе данных
-	if err := storage.DB.Where("client_name = ?", client.Client_name).Find(&historyOrders).Error; err != nil {
+	if err := storage.DB.Where("client_id = ?", client.ID).Find(&historyOrders).Error; err != nil {
 		if err == sql.ErrNoRows {
-			return nil, fmt.Errorf("no orders found for client")
+			return nil, fmt.Errorf("no orders found for client by client_id")
 		}
 		return nil, err
 	}
@@ -23,22 +23,10 @@ func GetOrderHistory(client *models.Client) ([]*models.HistoryOrder, error) {
 	return historyOrders, nil
 }
 
-func SaveOrderHistory(client *models.Client, order *models.HistoryOrder) error {
-	// Создаем транзакцию для безопасного выполнения операций
-	tx := storage.DB.Begin()
+func SaveOrderHistory(order *models.HistoryOrder) error {
 
-	// Добавляем новый заказ
-	if err := tx.Create(order).Error; err != nil {
-		tx.Rollback() // В случае ошибки откатываем транзакцию
+	if err := storage.DB.Save(&order).Error; err != nil {
 		return err
 	}
-
-	// Обновляем клиента, добавляя новый заказ в историю
-	if err := tx.Model(&client).Association("HistoryOrders").Append(order); err != nil {
-		tx.Rollback() // В случае ошибки откатываем транзакцию
-		return err
-	}
-
-	tx.Commit() // В случае ошибки откатываем транзакцию
 	return nil
 }

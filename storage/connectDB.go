@@ -27,7 +27,6 @@ func ConnectDB(configs *configs.Config) {
 
 func DropTables() {
 	DB.Migrator().DropTable(
-		&models.Client{},
 		&models.DepthOrderAsks{},
 		&models.DepthOrderBids{},
 		&models.OrderBook{},
