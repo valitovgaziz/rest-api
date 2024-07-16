@@ -7,7 +7,10 @@ import (
 )
 
 func GetOrderBook(ctx *gin.Context) {
-	OB, err := services.GetOrderBook(ctx.Param("exchange_name"), ctx.Param("pair"))
+	queryParams := ctx.Request.URL.Query()
+	exchanage_name := queryParams.Get("exchange_name")
+	pair := queryParams.Get("pair")
+	OB, err := services.GetOrderBook(exchanage_name, pair)
 	if err != nil {
 		ctx.JSON(400, gin.H{"error": err.Error()})
 		return
